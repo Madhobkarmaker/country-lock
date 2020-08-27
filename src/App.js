@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Country from './Country/Country';
+import Cart from './Cart/Cart';
 
 function App() {
   const [countries, setCountries] = useState([])
+  const [cart, setCart] = useState([])
 
   useEffect(()=>{
     fetch("https://restcountries.eu/rest/v2/all")
@@ -12,12 +14,16 @@ function App() {
     .then(data => setCountries(data))
   },[])
 
-  const eventHandler = (country) =>{ console.log("event added",country) } 
+  const eventHandler = (country) =>{ 
+    const newCart = [...cart, country];
+    setCart(newCart);
+  } 
   return (
     <div className="App">
       
       <h1>Countries Loaded : {countries.length}</h1>
-      <h4>Country added : </h4>
+      <h4>Country added : {cart.length} </h4>
+      <Cart cart = {cart}></Cart>
       <ul>
         {
           countries.map(country => <Country country={country} eventHandler = {eventHandler} key = {country.alpha3Code}></Country>)
